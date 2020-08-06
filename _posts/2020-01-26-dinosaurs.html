@@ -5,14 +5,200 @@ subtitle: "because they lacked opposable thumbs and the brainpower to build a sp
 date: 2020-01-26 23:45:13 -0400
 background: '/img/posts/01.jpg'
 ---
-
-            <!-- <div class="section-inner sectionLayout--insetColumn">
+<!-- <div class="section-inner sectionLayout--insetColumn">
+   <h3 name="afd2" id="afd2" class="graf graf--h3 graf--leading graf--title">Vehicle Detection and Tracking using Machine Learning and HOG</h3>
+   <p name="7d83" id="7d83" class="graf graf--p graf-after--h3">I am into my first term of Udacity’s Self Driving Car Nanodegree and I want to share my experience regarding the final project of Term 1 i.e. Vehicle Detection and Tracking. The complete code can be found <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>.</p>
+   <figure name="3dc8" id="3dc8" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 690px; max-height: 520px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 75.4%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*RCtm1RMBgNZozAVuM6TV3w.jpeg" data-width="690" data-height="520" src="https://cdn-images-1.medium.com/max/800/1*RCtm1RMBgNZozAVuM6TV3w.jpeg">
+      </div>
+   </figure>
+   <h3 name="9c71" id="9c71" class="graf graf--h3 graf-after--figure">Introduction</h3>
+   <p name="75c4" id="75c4" class="graf graf--p graf-after--h3">The basic objective of this project is to apply the concepts of HOG and Machine Learning to detect a Vehicle from a dashboard video. Wait a minute? Machine Learning and that too for Object detection in 2018? Sounds outdated, isn’t it? Sure, the Deep Learning implementations like YOLO and SSD that utilize convolutional neural network stand out for this purpose but when you are a beginner in this field, its better to start with the classical approach. So let’s get started!!</p>
+   <h3 name="8448" id="8448" class="graf graf--h3 graf-after--p">Collecting Data</h3>
+   <p name="f58b" id="f58b" class="graf graf--p graf-after--h3">The most important thing for any machine learning problem is the labelled data set and here we need to have two sets of data: Vehicle and Non Vehicle Images. The images were taken from some already available datasets like <a href="http://www.gti.ssr.upm.es/data/Vehicle_database.html" data-href="http://www.gti.ssr.upm.es/data/Vehicle_database.html" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">GTI</a> and <a href="http://www.cvlibs.net/datasets/kitti/" data-href="http://www.cvlibs.net/datasets/kitti/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">KITTI Vision</a>. The images are of size 64x64 and somewhat looked like this-:</p>
+   <figure name="71aa" id="71aa" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 376px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.7%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*tbw4_4zf75g6ElYZYn9Stg.png" data-width="977" data-height="525" src="https://cdn-images-1.medium.com/max/800/1*tbw4_4zf75g6ElYZYn9Stg.png">
+      </div>
+      <figcaption class="imageCaption">Figure 1. Vehicle Images</figcaption>
+   </figure>
+   <figure name="a342" id="a342" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 385px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 55.00000000000001%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*xomTyjYSJpJCw96ZwM4YHA.png" data-width="976" data-height="537" src="https://cdn-images-1.medium.com/max/800/1*xomTyjYSJpJCw96ZwM4YHA.png">
+      </div>
+      <figcaption class="imageCaption">Figure 2. Non Vehicle Images</figcaption>
+   </figure>
+   <h3 name="040b" id="040b" class="graf graf--h3 graf-after--figure">Extracting Features</h3>
+   <p name="e10e" id="e10e" class="graf graf--p graf-after--h3">Once we have got the dataset the next obvious step is to extract the features from the images. But why? Why can’t we feed the image as it is to the Machine Learning Classifier? My friend, if we do so It will take ages to process the image and just a reminder we are not feeding images to CNN here and this is not a Deep Learning Problem after all!</p>
+   <p name="5496" id="5496" class="graf graf--p graf-after--p">Ok got it, but still how to extract the features? Well, there are three good methods if you want to extract features from the images.</p>
+   <ol class="postList">
+      <li name="2c01" id="2c01" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Color Histograms- </strong>the most simple and intuitive way is to extract the features from various color channels of the images. This can be done by plotting the histograms of various color channels and then collecting the data from the bins of the histogram. These bins give us useful information about the image and are really helpful in extracting good features.</li>
+   </ol>
+   <figure name="fa3d" id="fa3d" class="graf graf--figure graf-after--li">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 170px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.3%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*Rnl12KlaDrqvAiPuoL50GQ.png" data-width="999" data-height="243" src="https://cdn-images-1.medium.com/max/800/1*Rnl12KlaDrqvAiPuoL50GQ.png">
+      </div>
+      <figcaption class="imageCaption">Figure 3. Color Histograms for Vehicle Image</figcaption>
+   </figure>
+   <figure name="9b52" id="9b52" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 172px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.6%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*A0r3aHFKJ-HTSMQ01fw6OQ.png" data-width="995" data-height="245" src="https://cdn-images-1.medium.com/max/800/1*A0r3aHFKJ-HTSMQ01fw6OQ.png">
+      </div>
+      <figcaption class="imageCaption">Figure 4. Color Histograms for Non Vehicle Image</figcaption>
+   </figure>
+   <p name="b4ee" id="b4ee" class="graf graf--p graf-after--figure">2. <strong class="markup--strong markup--p-strong">Spatial Binning- </strong>Color Histograms was certainly cool, but if the features of an image are so much important then why can’t we take all the features using some sort of numpy function? Well certainly you are correct on this point. We can extract all the information from the image by flattening it using numpy.ravel(). But hold on, let’s do some calculation, image size is 64x64 and it is a 3 channel image so the total number of features extracted are 12,288!! Close to 12k features from a single image is not a good idea! So here Spatial Binning comes to picture! What if I say, a 64x64 image gives the same information as 16x16 gives? Of course there is some loss of information but still we are able to extract good features out of the image! So if I apply numpy.ravel() to a 16x16 image, I would get only 768 features!</p>
+   <figure name="f078" id="f078" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 223px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 31.900000000000002%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*IChYqFYFWmVvS4l4W_5F7Q.png" data-width="985" data-height="314" src="https://cdn-images-1.medium.com/max/800/1*IChYqFYFWmVvS4l4W_5F7Q.png">
+      </div>
+      <figcaption class="imageCaption">Figure 5. Spatial Binning Intuition</figcaption>
+   </figure>
+   <p name="80e5" id="80e5" class="graf graf--p graf-after--figure">3. <strong class="markup--strong markup--p-strong">HOG (Histogram of Oriented Gradients)- </strong>The feature extraction techniques discussed above are pretty cool but certainly not much powerful as compared to HOG. HOG actually takes an image, divides it into various blocks in which we have cells, in cells we observe the pixels and extract the feature vectors from them. The pixels inside the cell are classified into different orientations and the resulting vector for a particular cell inside a block is decided by the magnitude of the strongest vector. Note- here we are not counting the occurrence of a pixel in a particular orientation but instead we are interested in the magnitude of the pixel in that particular orientation. To read more about HOG this is a good <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" data-href="https://www.learnopencv.com/histogram-of-oriented-gradients/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">link</a>.</p>
+   <figure name="5aeb" id="5aeb" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 143px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 20.4%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*RsyVJpi9g6_gz7C2olGwvA.png" data-width="984" data-height="201" src="https://cdn-images-1.medium.com/max/800/1*RsyVJpi9g6_gz7C2olGwvA.png">
+      </div>
+      <figcaption class="imageCaption">Figure 6. HOG with 9 orientations. CPB(Cells Per Block) PPC (Pixels Per Cell)</figcaption>
+   </figure>
+   <p name="b848" id="b848" class="graf graf--p graf-after--figure">Just a point to note here. OpenCV HOG returns Hog Image and Feature Vectors but the length of image.ravel() is not equal to feature vector length. This is because HOG internally performs some computations and reduces the redundancies in the data and returns optimized feature vectors. Also more the number of lines you see in the image means it will return more features.</p>
+   <h3 name="555e" id="555e" class="graf graf--h3 graf-after--p">Generating Dataset and Data Preprocessing</h3>
+   <p name="74c4" id="74c4" class="graf graf--p graf-after--h3">Ok, cool Now we know how to extract features so we will process these steps for all images? Yes, you are right but it is not necessary to use all features from all the methods above. Let’s use only HOG for the moment and ignore color histograms and spatial binning.</p>
+   <p name="7b4e" id="7b4e" class="graf graf--p graf-after--p">Let’s decide on the HOG parameters to extract features. After a lot of hit and trials I decided to go with the following-:</p>
+   <ul class="postList">
+      <li name="7ae0" id="7ae0" class="graf graf--li graf-after--p">Orientations- 9</li>
+      <li name="2872" id="2872" class="graf graf--li graf-after--li">Cells Per Block- 2</li>
+      <li name="b642" id="b642" class="graf graf--li graf-after--li">Pixels Per Cell- 16</li>
+      <li name="30d9" id="30d9" class="graf graf--li graf-after--li">Colorspace- YUV</li>
+   </ul>
+   <p name="bb53" id="bb53" class="graf graf--p graf-after--li">Cool, after running images through the HOG function with these parameters the final parameter size comes out to be 972 which is pretty cool!</p>
+   <p name="fcb7" id="fcb7" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Data Preprocessing<br></strong>Now our features are ready the next step is to pre-process the data. Don’t worry sklearn library is always there to help in these tasks. We can perform following preprocessing-:</p>
+   <p name="241e" id="241e" class="graf graf--p graf-after--p">i) Shuffling Data<br>ii) Splitting the Dataset into training and test set<br>iii) Normalization and Scaling of Data ( Fit and Transform of Dataset)</p>
+   <p name="ab12" id="ab12" class="graf graf--p graf-after--p">An very important point here to note is that after Step (ii) we have to fit and transform the data, but we should not fit the data in the test set because we do not want our classifier to sneak peak into our data.</p>
+   <h3 name="be83" id="be83" class="graf graf--h3 graf-after--p">Training Classifier</h3>
+   <p name="8dd7" id="8dd7" class="graf graf--p graf-after--h3">Well, features are extracted, the data is preprocessed! What next? Yup, now comes the turn of our classifier. The choice of classifier is yours but there are a plenty to chose from-:</p>
+   <ul class="postList">
+      <li name="9c1c" id="9c1c" class="graf graf--li graf-after--p">Support Vector Machines</li>
+      <li name="26c0" id="26c0" class="graf graf--li graf-after--li">Naive Bayes</li>
+      <li name="138f" id="138f" class="graf graf--li graf-after--li">Decision Tree</li>
+   </ul>
+   <p name="5131" id="5131" class="graf graf--p graf-after--li">I decided to use Support Vector Machines because they have good compatibility with HOG. Now in SVM we have SVC(Support Vector Classifier) and here also we have a choice with various kernels and different C and gamma values.</p>
+   <p name="3998" id="3998" class="graf graf--p graf-after--p">I trained my classifier on both Linear and rbf kernel. The linear kernel took around 1.8 seconds to train with a test accuracy of 98.7% while rbf kernel took around 25 minutes to train with a test accuracy of 98.3%. I decided to use LinearSVC with default parameters solely because it was taking less time to run and it was more accurate than rbf kernel.</p>
+   <h3 name="2bc7" id="2bc7" class="graf graf--h3 graf-after--p"><strong class="markup--strong markup--h3-strong">Sliding Window</strong></h3>
+   <p name="aa25" id="aa25" class="graf graf--p graf-after--h3">Cool our classifier is now well trained and it will 99% of time will be able to predict vehicles and non vehicles correctly. So what is the next step? Well, the next step is to apply the classifier to patches of your image in order to find where exactly in the image the car is!</p>
+   <p name="3dff" id="3dff" class="graf graf--p graf-after--p">But first you need to decide on various important parameters. The first thing is from where do you start searching the car from, obviously you should not search the car in the sky, hence you can ignore the top half of the image, so basically decide a horizon under which you will search your cars. The second important thing is what will be the window size you will look for and how much two windows should overlap? Well that depends on your input image length, since here it is 64x64 so we are going to start with base window size of 64x64 only. The next important thing and very important point here to note is <strong class="markup--strong markup--p-strong">that you search for smaller cars near the horizon and as you move towards the dashboard camera you search for larger cars</strong>. This is because if the cars are near to horizon they are smaller as they are distant from your car and reverse is the case with the near cars.</p>
+   <p name="dccc" id="dccc" class="graf graf--p graf-after--p">But how much should I increase the window size and how much overlap? Well, that depends on your vision. I decided to use windows of 4 different sizes. In the below images I will try to illustrate my search area with the respective window sizes.</p>
+   <figure name="c7a7" id="c7a7" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 396px; max-height: 211px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.300000000000004%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*4yTgxzgU2m_dprjNVlODEg.jpeg" data-width="396" data-height="211" src="https://cdn-images-1.medium.com/max/800/1*4yTgxzgU2m_dprjNVlODEg.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 7. My Choice of Window Sizes with Overlap and Y coordinates</figcaption>
+   </figure>
+   <figure name="d022" id="d022" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 679px; max-height: 385px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.699999999999996%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg" data-width="679" data-height="385" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 8. Window Size 64x64 Coverage</figcaption>
+   </figure>
+   <figure name="6212" id="6212" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 680px; max-height: 381px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.00000000000001%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*dVObtUCDcciK2mT9CKmdHA.jpeg" data-width="680" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*dVObtUCDcciK2mT9CKmdHA.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 9. Window Size 80x80 Coverage</figcaption>
+   </figure>
+   <figure name="6ee9" id="6ee9" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*YaK_vrgaR6G49xTb_1rc7g.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YaK_vrgaR6G49xTb_1rc7g.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 10. Window Size 96x96 Coverage</figcaption>
+   </figure>
+   <figure name="fb03" id="fb03" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 667px; max-height: 379px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.8%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*YM4xsH56WUD6064TLoIVbA.jpeg" data-width="667" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YM4xsH56WUD6064TLoIVbA.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 11. Window Size 128x128 coverage</figcaption>
+   </figure>
+   <p name="231b" id="231b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">I had total window size of 470!</strong> So once we have defined all the sliding windows we will be searching for, the next step is to extract features of all the patches window by window and run our classifier to predict if the found window is car or not. Remember we trained our model on feature extracted from 64x64 image so for windows that are not of the same size we need to resize first them to 64x64 in order to keep the features same. Well lets see how our classifier worked.</p>
+   <figure name="80fc" id="80fc" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*iqut53Zj7OzK4TeKnigFpQ.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*iqut53Zj7OzK4TeKnigFpQ.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 12. Refined Windows after running the classifier.</figcaption>
+   </figure>
+   <h3 name="3c38" id="3c38" class="graf graf--h3 graf-after--figure">Heatmaps</h3>
+   <p name="1262" id="1262" class="graf graf--p graf-after--h3">So we are able to detect the sliding windows, but there is a problem. So many windows are overlapping with each other, how to draw the final bounding box? Answer is Heatmap. We will create a blank black image of the same size as that of original image and for all refined windows that were identified we will add the pixels values by one for the whole region of the refined window. In this way we will have regions with different intensity with the common region being the most intense. We can then apply a threshold to clip the final image and get the coordinates of the final box.</p>
+   <figure name="3cca" id="3cca" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 681px; max-height: 400px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 58.699999999999996%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*_LHNVY22lvpnqBYcjoqk9w.jpeg" data-width="681" data-height="400" src="https://cdn-images-1.medium.com/max/800/1*_LHNVY22lvpnqBYcjoqk9w.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 13. Heatmap drawn after increasing the pixel intensities of refined windows</figcaption>
+   </figure>
+   <figure name="3b0c" id="3b0c" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 403px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 57.49999999999999%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*5NVPIjwExeFL33FndZN6ag.jpeg" data-width="713" data-height="410" src="https://cdn-images-1.medium.com/max/800/1*5NVPIjwExeFL33FndZN6ag.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 14. Final Image After applying the threshold</figcaption>
+   </figure>
+   <figure name="efe2" id="efe2" class="graf graf--figure graf-after--figure">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 394px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.3%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg" data-width="1280" data-height="720" src="https://cdn-images-1.medium.com/max/800/1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg">
+      </div>
+      <figcaption class="imageCaption">Figure 15. Testing Pipeline On a New Image</figcaption>
+   </figure>
+   <p name="fe95" id="fe95" class="graf graf--p graf-after--figure">Ok, that was cool, is that all? Well, yes and no! There is one more problem when you run the code on a number of more test images.</p>
+   <figure name="1bab" id="1bab" class="graf graf--figure graf-after--p">
+      <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 1153px;">
+         <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 164.7%;"></div>
+         <img class="graf-image img-fluid" data-image-id="1*ri3XRzhNoYR0-qxDaOR7Og.png" data-width="1159" data-height="1909" src="https://cdn-images-1.medium.com/max/800/1*ri3XRzhNoYR0-qxDaOR7Og.png">
+      </div>
+      <figcaption class="imageCaption">Figure 16. Applying Heatmap on some more Images</figcaption>
+   </figure>
+   <p name="3337" id="3337" class="graf graf--p graf-after--figure">Well as you an observe there are some false positives detected in our image, cars coming from left lane are also detected, so how do we solve this? First of all we need to observe how this problem came up in the first place? Well our classifier had 98.7% accuracy. We had total number of windows to be 470. So in the resulting windows we will have around 6 windows that will be false positives. These windows can appear anywhere if you have a lower threshold in the final heatmap image. So to solve the problem of car coming in the other lane and some false positives can be solved by just increasing the threshold. In my case I set the threshold to value 4 but again thresholding depends on a number of factors, the colorspace used, the SVM accuracy and so on.</p>
+   <h3 name="3698" id="3698" class="graf graf--h3 graf-after--p">Averaging Out</h3>
+   <p name="ff1c" id="ff1c" class="graf graf--p graf-after--h3">Well we are almost done at this moment! The pipeline works fantastic with the images but still there is one problem if you will run the pipeline on the images coming from a video stream. The final detected boxes will become very shaky and will not deliver a smooth experience, it may be possible that the box goes away in some frames. So what’s the solution? The solution is pretty intuitive, store all the refined windows detected from the previous 15 frames and average out the rectangles in the current frame. Also you need to adjust threshold to a higher level now. Just by doing so the final bounding boxes appear less shaky and delivers a smooth flow. I tried my pipeline on the project video and results are somewhat like <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">this</a>.</p>
+   <h3 name="2fa7" id="2fa7" class="graf graf--h3 graf-after--p">Some Tips and Tricks</h3>
+   <ol class="postList">
+      <li name="2225" id="2225" class="graf graf--li graf-after--h3">If you are stuck with long processing time while running pipeline on video, please try reducing windows first.</li>
+      <li name="68af" id="68af" class="graf graf--li graf-after--li">If you are still stuck with long processing time try reducing the number of features extracted.</li>
+      <li name="fa1a" id="fa1a" class="graf graf--li graf-after--li">If you have a test set of say 10,000 images and your feature size is 8000, SVM will not perform upto the mark even if the accuracy on the test set is above 95%. Use SVM with ‘rbf’ kernel or reduce features.</li>
+      <li name="18e7" id="18e7" class="graf graf--li graf-after--li">If it still takes long time for the pipeline to run, try skipping one half or two thirds of the frames. It will speed up. Remember by skipping frames I mean skipping the processing of frames and setting the refined windows of that frame to rectangles gathered from previous 15 frames stored in some data structure.</li>
+   </ol>
+   <blockquote name="223a" id="223a" class="graf graf--pullquote graf-after--li">You can observe the final video output <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" class="markup--anchor markup--pullquote-anchor" rel="noopener" target="_blank">here</a>.</blockquote>
+   <p name="ccb4" id="ccb4" class="graf graf--p graf-after--pullquote graf--trailing">Of course the video is not perfect but I am happy with the final output. There were less lags, also cars coming from other direction were not detected. Also. I am working on YOLO and SSD approach and will write soon about the learnings from them too. HURRAY!! Term 1 is over, time for some self-retrospection and very excited for term 2.</p>
+   </div> -->
+<article class="h-entry">
+   <section data-field="subtitle" class="p-summary">
+      I am into my first term of Udacity’s Self Driving Car Nanodegree and I want to share my experience regarding the final project of Term 1…
+   </section>
+   <section data-field="body" class="e-content">
+      <section name="7b89" class="section section--body section--first section--last">
+         <div class="section-divider">
+            <hr class="section-divider">
+         </div>
+         <div class="section-content">
+            <div class="section-inner sectionLayout--insetColumn">
                <h3 name="afd2" id="afd2" class="graf graf--h3 graf--leading graf--title">Vehicle Detection and Tracking using Machine Learning and HOG</h3>
                <p name="7d83" id="7d83" class="graf graf--p graf-after--h3">I am into my first term of Udacity’s Self Driving Car Nanodegree and I want to share my experience regarding the final project of Term 1 i.e. Vehicle Detection and Tracking. The complete code can be found <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>.</p>
                <figure name="3dc8" id="3dc8" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 690px; max-height: 520px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 75.4%;"></div>
-                     <img class="graf-image" data-image-id="1*RCtm1RMBgNZozAVuM6TV3w.jpeg" data-width="690" data-height="520" src="https://cdn-images-1.medium.com/max/800/1*RCtm1RMBgNZozAVuM6TV3w.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*RCtm1RMBgNZozAVuM6TV3w.jpeg" data-width="690" data-height="520" src="https://cdn-images-1.medium.com/max/800/1*RCtm1RMBgNZozAVuM6TV3w.jpeg">
                   </div>
                </figure>
                <h3 name="9c71" id="9c71" class="graf graf--h3 graf-after--figure">Introduction</h3>
@@ -22,14 +208,14 @@ background: '/img/posts/01.jpg'
                <figure name="71aa" id="71aa" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 376px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.7%;"></div>
-                     <img class="graf-image" data-image-id="1*tbw4_4zf75g6ElYZYn9Stg.png" data-width="977" data-height="525" src="https://cdn-images-1.medium.com/max/800/1*tbw4_4zf75g6ElYZYn9Stg.png">
+                     <img class="graf-image img-fluid" data-image-id="1*tbw4_4zf75g6ElYZYn9Stg.png" data-width="977" data-height="525" src="https://cdn-images-1.medium.com/max/800/1*tbw4_4zf75g6ElYZYn9Stg.png">
                   </div>
                   <figcaption class="imageCaption">Figure 1. Vehicle Images</figcaption>
                </figure>
                <figure name="a342" id="a342" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 385px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 55.00000000000001%;"></div>
-                     <img class="graf-image" data-image-id="1*xomTyjYSJpJCw96ZwM4YHA.png" data-width="976" data-height="537" src="https://cdn-images-1.medium.com/max/800/1*xomTyjYSJpJCw96ZwM4YHA.png">
+                     <img class="graf-image img-fluid" data-image-id="1*xomTyjYSJpJCw96ZwM4YHA.png" data-width="976" data-height="537" src="https://cdn-images-1.medium.com/max/800/1*xomTyjYSJpJCw96ZwM4YHA.png">
                   </div>
                   <figcaption class="imageCaption">Figure 2. Non Vehicle Images</figcaption>
                </figure>
@@ -42,14 +228,14 @@ background: '/img/posts/01.jpg'
                <figure name="fa3d" id="fa3d" class="graf graf--figure graf-after--li">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 170px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.3%;"></div>
-                     <img class="graf-image" data-image-id="1*Rnl12KlaDrqvAiPuoL50GQ.png" data-width="999" data-height="243" src="https://cdn-images-1.medium.com/max/800/1*Rnl12KlaDrqvAiPuoL50GQ.png">
+                     <img class="graf-image img-fluid" data-image-id="1*Rnl12KlaDrqvAiPuoL50GQ.png" data-width="999" data-height="243" src="https://cdn-images-1.medium.com/max/800/1*Rnl12KlaDrqvAiPuoL50GQ.png">
                   </div>
                   <figcaption class="imageCaption">Figure 3. Color Histograms for Vehicle Image</figcaption>
                </figure>
                <figure name="9b52" id="9b52" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 172px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.6%;"></div>
-                     <img class="graf-image" data-image-id="1*A0r3aHFKJ-HTSMQ01fw6OQ.png" data-width="995" data-height="245" src="https://cdn-images-1.medium.com/max/800/1*A0r3aHFKJ-HTSMQ01fw6OQ.png">
+                     <img class="graf-image img-fluid" data-image-id="1*A0r3aHFKJ-HTSMQ01fw6OQ.png" data-width="995" data-height="245" src="https://cdn-images-1.medium.com/max/800/1*A0r3aHFKJ-HTSMQ01fw6OQ.png">
                   </div>
                   <figcaption class="imageCaption">Figure 4. Color Histograms for Non Vehicle Image</figcaption>
                </figure>
@@ -57,7 +243,7 @@ background: '/img/posts/01.jpg'
                <figure name="f078" id="f078" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 223px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 31.900000000000002%;"></div>
-                     <img class="graf-image" data-image-id="1*IChYqFYFWmVvS4l4W_5F7Q.png" data-width="985" data-height="314" src="https://cdn-images-1.medium.com/max/800/1*IChYqFYFWmVvS4l4W_5F7Q.png">
+                     <img class="graf-image img-fluid" data-image-id="1*IChYqFYFWmVvS4l4W_5F7Q.png" data-width="985" data-height="314" src="https://cdn-images-1.medium.com/max/800/1*IChYqFYFWmVvS4l4W_5F7Q.png">
                   </div>
                   <figcaption class="imageCaption">Figure 5. Spatial Binning Intuition</figcaption>
                </figure>
@@ -65,7 +251,7 @@ background: '/img/posts/01.jpg'
                <figure name="5aeb" id="5aeb" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 143px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 20.4%;"></div>
-                     <img class="graf-image" data-image-id="1*RsyVJpi9g6_gz7C2olGwvA.png" data-width="984" data-height="201" src="https://cdn-images-1.medium.com/max/800/1*RsyVJpi9g6_gz7C2olGwvA.png">
+                     <img class="graf-image img-fluid" data-image-id="1*RsyVJpi9g6_gz7C2olGwvA.png" data-width="984" data-height="201" src="https://cdn-images-1.medium.com/max/800/1*RsyVJpi9g6_gz7C2olGwvA.png">
                   </div>
                   <figcaption class="imageCaption">Figure 6. HOG with 9 orientations. CPB(Cells Per Block) PPC (Pixels Per Cell)</figcaption>
                </figure>
@@ -99,35 +285,35 @@ background: '/img/posts/01.jpg'
                <figure name="c7a7" id="c7a7" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 396px; max-height: 211px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.300000000000004%;"></div>
-                     <img class="graf-image" data-image-id="1*4yTgxzgU2m_dprjNVlODEg.jpeg" data-width="396" data-height="211" src="https://cdn-images-1.medium.com/max/800/1*4yTgxzgU2m_dprjNVlODEg.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*4yTgxzgU2m_dprjNVlODEg.jpeg" data-width="396" data-height="211" src="https://cdn-images-1.medium.com/max/800/1*4yTgxzgU2m_dprjNVlODEg.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 7. My Choice of Window Sizes with Overlap and Y coordinates</figcaption>
                </figure>
                <figure name="d022" id="d022" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 679px; max-height: 385px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.699999999999996%;"></div>
-                     <img class="graf-image" data-image-id="1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg" data-width="679" data-height="385" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg" data-width="679" data-height="385" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 8. Window Size 64x64 Coverage</figcaption>
                </figure>
                <figure name="6212" id="6212" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 680px; max-height: 381px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.00000000000001%;"></div>
-                     <img class="graf-image" data-image-id="1*dVObtUCDcciK2mT9CKmdHA.jpeg" data-width="680" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*dVObtUCDcciK2mT9CKmdHA.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*dVObtUCDcciK2mT9CKmdHA.jpeg" data-width="680" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*dVObtUCDcciK2mT9CKmdHA.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 9. Window Size 80x80 Coverage</figcaption>
                </figure>
                <figure name="6ee9" id="6ee9" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div>
-                     <img class="graf-image" data-image-id="1*YaK_vrgaR6G49xTb_1rc7g.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YaK_vrgaR6G49xTb_1rc7g.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*YaK_vrgaR6G49xTb_1rc7g.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YaK_vrgaR6G49xTb_1rc7g.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 10. Window Size 96x96 Coverage</figcaption>
                </figure>
                <figure name="fb03" id="fb03" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 667px; max-height: 379px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.8%;"></div>
-                     <img class="graf-image" data-image-id="1*YM4xsH56WUD6064TLoIVbA.jpeg" data-width="667" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YM4xsH56WUD6064TLoIVbA.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*YM4xsH56WUD6064TLoIVbA.jpeg" data-width="667" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YM4xsH56WUD6064TLoIVbA.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 11. Window Size 128x128 coverage</figcaption>
                </figure>
@@ -135,7 +321,7 @@ background: '/img/posts/01.jpg'
                <figure name="80fc" id="80fc" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div>
-                     <img class="graf-image" data-image-id="1*iqut53Zj7OzK4TeKnigFpQ.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*iqut53Zj7OzK4TeKnigFpQ.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*iqut53Zj7OzK4TeKnigFpQ.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*iqut53Zj7OzK4TeKnigFpQ.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 12. Refined Windows after running the classifier.</figcaption>
                </figure>
@@ -144,21 +330,21 @@ background: '/img/posts/01.jpg'
                <figure name="3cca" id="3cca" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 681px; max-height: 400px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 58.699999999999996%;"></div>
-                     <img class="graf-image" data-image-id="1*_LHNVY22lvpnqBYcjoqk9w.jpeg" data-width="681" data-height="400" src="https://cdn-images-1.medium.com/max/800/1*_LHNVY22lvpnqBYcjoqk9w.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*_LHNVY22lvpnqBYcjoqk9w.jpeg" data-width="681" data-height="400" src="https://cdn-images-1.medium.com/max/800/1*_LHNVY22lvpnqBYcjoqk9w.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 13. Heatmap drawn after increasing the pixel intensities of refined windows</figcaption>
                </figure>
                <figure name="3b0c" id="3b0c" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 403px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 57.49999999999999%;"></div>
-                     <img class="graf-image" data-image-id="1*5NVPIjwExeFL33FndZN6ag.jpeg" data-width="713" data-height="410" src="https://cdn-images-1.medium.com/max/800/1*5NVPIjwExeFL33FndZN6ag.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*5NVPIjwExeFL33FndZN6ag.jpeg" data-width="713" data-height="410" src="https://cdn-images-1.medium.com/max/800/1*5NVPIjwExeFL33FndZN6ag.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 14. Final Image After applying the threshold</figcaption>
                </figure>
                <figure name="efe2" id="efe2" class="graf graf--figure graf-after--figure">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 394px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.3%;"></div>
-                     <img class="graf-image" data-image-id="1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg" data-width="1280" data-height="720" src="https://cdn-images-1.medium.com/max/800/1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg">
+                     <img class="graf-image img-fluid" data-image-id="1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg" data-width="1280" data-height="720" src="https://cdn-images-1.medium.com/max/800/1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg">
                   </div>
                   <figcaption class="imageCaption">Figure 15. Testing Pipeline On a New Image</figcaption>
                </figure>
@@ -166,7 +352,7 @@ background: '/img/posts/01.jpg'
                <figure name="1bab" id="1bab" class="graf graf--figure graf-after--p">
                   <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 1153px;">
                      <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 164.7%;"></div>
-                     <img class="graf-image" data-image-id="1*ri3XRzhNoYR0-qxDaOR7Og.png" data-width="1159" data-height="1909" src="https://cdn-images-1.medium.com/max/800/1*ri3XRzhNoYR0-qxDaOR7Og.png">
+                     <img class="graf-image img-fluid" data-image-id="1*ri3XRzhNoYR0-qxDaOR7Og.png" data-width="1159" data-height="1909" src="https://cdn-images-1.medium.com/max/800/1*ri3XRzhNoYR0-qxDaOR7Og.png">
                   </div>
                   <figcaption class="imageCaption">Figure 16. Applying Heatmap on some more Images</figcaption>
                </figure>
@@ -182,15 +368,13 @@ background: '/img/posts/01.jpg'
                </ol>
                <blockquote name="223a" id="223a" class="graf graf--pullquote graf-after--li">You can observe the final video output <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" class="markup--anchor markup--pullquote-anchor" rel="noopener" target="_blank">here</a>.</blockquote>
                <p name="ccb4" id="ccb4" class="graf graf--p graf-after--pullquote graf--trailing">Of course the video is not perfect but I am happy with the final output. There were less lags, also cars coming from other direction were not detected. Also. I am working on YOLO and SSD approach and will write soon about the learnings from them too. HURRAY!! Term 1 is over, time for some self-retrospection and very excited for term 2.</p>
-            </div> -->
-
-
-            <article class="h-entry">
-                
-                <section data-field="subtitle" class="p-summary">
-                I am into my first term of Udacity’s Self Driving Car Nanodegree and I want to share my experience regarding the final project of Term 1…
-                </section>
-                <section data-field="body" class="e-content">
-                <section name="7b89" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="afd2" id="afd2" class="graf graf--h3 graf--leading graf--title">Vehicle Detection and Tracking using Machine Learning and HOG</h3><p name="7d83" id="7d83" class="graf graf--p graf-after--h3">I am into my first term of Udacity’s Self Driving Car Nanodegree and I want to share my experience regarding the final project of Term 1 i.e. Vehicle Detection and Tracking. The complete code can be found <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>.</p><figure name="3dc8" id="3dc8" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 690px; max-height: 520px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 75.4%;"></div><img class="graf-image" data-image-id="1*RCtm1RMBgNZozAVuM6TV3w.jpeg" data-width="690" data-height="520" src="https://cdn-images-1.medium.com/max/800/1*RCtm1RMBgNZozAVuM6TV3w.jpeg"></div></figure><h3 name="9c71" id="9c71" class="graf graf--h3 graf-after--figure">Introduction</h3><p name="75c4" id="75c4" class="graf graf--p graf-after--h3">The basic objective of this project is to apply the concepts of HOG and Machine Learning to detect a Vehicle from a dashboard video. Wait a minute? Machine Learning and that too for Object detection in 2018? Sounds outdated, isn’t it? Sure, the Deep Learning implementations like YOLO and SSD that utilize convolutional neural network stand out for this purpose but when you are a beginner in this field, its better to start with the classical approach. So let’s get started!!</p><h3 name="8448" id="8448" class="graf graf--h3 graf-after--p">Collecting Data</h3><p name="f58b" id="f58b" class="graf graf--p graf-after--h3">The most important thing for any machine learning problem is the labelled data set and here we need to have two sets of data: Vehicle and Non Vehicle Images. The images were taken from some already available datasets like <a href="http://www.gti.ssr.upm.es/data/Vehicle_database.html" data-href="http://www.gti.ssr.upm.es/data/Vehicle_database.html" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">GTI</a> and <a href="http://www.cvlibs.net/datasets/kitti/" data-href="http://www.cvlibs.net/datasets/kitti/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">KITTI Vision</a>. The images are of size 64x64 and somewhat looked like this-:</p><figure name="71aa" id="71aa" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 376px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.7%;"></div><img class="graf-image" data-image-id="1*tbw4_4zf75g6ElYZYn9Stg.png" data-width="977" data-height="525" src="https://cdn-images-1.medium.com/max/800/1*tbw4_4zf75g6ElYZYn9Stg.png"></div><figcaption class="imageCaption">Figure 1. Vehicle Images</figcaption></figure><figure name="a342" id="a342" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 385px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 55.00000000000001%;"></div><img class="graf-image" data-image-id="1*xomTyjYSJpJCw96ZwM4YHA.png" data-width="976" data-height="537" src="https://cdn-images-1.medium.com/max/800/1*xomTyjYSJpJCw96ZwM4YHA.png"></div><figcaption class="imageCaption">Figure 2. Non Vehicle Images</figcaption></figure><h3 name="040b" id="040b" class="graf graf--h3 graf-after--figure">Extracting Features</h3><p name="e10e" id="e10e" class="graf graf--p graf-after--h3">Once we have got the dataset the next obvious step is to extract the features from the images. But why? Why can’t we feed the image as it is to the Machine Learning Classifier? My friend, if we do so It will take ages to process the image and just a reminder we are not feeding images to CNN here and this is not a Deep Learning Problem after all!</p><p name="5496" id="5496" class="graf graf--p graf-after--p">Ok got it, but still how to extract the features? Well, there are three good methods if you want to extract features from the images.</p><ol class="postList"><li name="2c01" id="2c01" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Color Histograms- </strong>the most simple and intuitive way is to extract the features from various color channels of the images. This can be done by plotting the histograms of various color channels and then collecting the data from the bins of the histogram. These bins give us useful information about the image and are really helpful in extracting good features.</li></ol><figure name="fa3d" id="fa3d" class="graf graf--figure graf-after--li"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 170px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.3%;"></div><img class="graf-image" data-image-id="1*Rnl12KlaDrqvAiPuoL50GQ.png" data-width="999" data-height="243" src="https://cdn-images-1.medium.com/max/800/1*Rnl12KlaDrqvAiPuoL50GQ.png"></div><figcaption class="imageCaption">Figure 3. Color Histograms for Vehicle Image</figcaption></figure><figure name="9b52" id="9b52" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 172px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.6%;"></div><img class="graf-image" data-image-id="1*A0r3aHFKJ-HTSMQ01fw6OQ.png" data-width="995" data-height="245" src="https://cdn-images-1.medium.com/max/800/1*A0r3aHFKJ-HTSMQ01fw6OQ.png"></div><figcaption class="imageCaption">Figure 4. Color Histograms for Non Vehicle Image</figcaption></figure><p name="b4ee" id="b4ee" class="graf graf--p graf-after--figure">2. <strong class="markup--strong markup--p-strong">Spatial Binning- </strong>Color Histograms was certainly cool, but if the features of an image are so much important then why can’t we take all the features using some sort of numpy function? Well certainly you are correct on this point. We can extract all the information from the image by flattening it using numpy.ravel(). But hold on, let’s do some calculation, image size is 64x64 and it is a 3 channel image so the total number of features extracted are 12,288!! Close to 12k features from a single image is not a good idea! So here Spatial Binning comes to picture! What if I say, a 64x64 image gives the same information as 16x16 gives? Of course there is some loss of information but still we are able to extract good features out of the image! So if I apply numpy.ravel() to a 16x16 image, I would get only 768 features!</p><figure name="f078" id="f078" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 223px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 31.900000000000002%;"></div><img class="graf-image" data-image-id="1*IChYqFYFWmVvS4l4W_5F7Q.png" data-width="985" data-height="314" src="https://cdn-images-1.medium.com/max/800/1*IChYqFYFWmVvS4l4W_5F7Q.png"></div><figcaption class="imageCaption">Figure 5. Spatial Binning Intuition</figcaption></figure><p name="80e5" id="80e5" class="graf graf--p graf-after--figure">3. <strong class="markup--strong markup--p-strong">HOG (Histogram of Oriented Gradients)- </strong>The feature extraction techniques discussed above are pretty cool but certainly not much powerful as compared to HOG. HOG actually takes an image, divides it into various blocks in which we have cells, in cells we observe the pixels and extract the feature vectors from them. The pixels inside the cell are classified into different orientations and the resulting vector for a particular cell inside a block is decided by the magnitude of the strongest vector. Note- here we are not counting the occurrence of a pixel in a particular orientation but instead we are interested in the magnitude of the pixel in that particular orientation. To read more about HOG this is a good <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" data-href="https://www.learnopencv.com/histogram-of-oriented-gradients/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">link</a>.</p><figure name="5aeb" id="5aeb" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 143px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 20.4%;"></div><img class="graf-image" data-image-id="1*RsyVJpi9g6_gz7C2olGwvA.png" data-width="984" data-height="201" src="https://cdn-images-1.medium.com/max/800/1*RsyVJpi9g6_gz7C2olGwvA.png"></div><figcaption class="imageCaption">Figure 6. HOG with 9 orientations. CPB(Cells Per Block) PPC (Pixels Per Cell)</figcaption></figure><p name="b848" id="b848" class="graf graf--p graf-after--figure">Just a point to note here. OpenCV HOG returns Hog Image and Feature Vectors but the length of image.ravel() is not equal to feature vector length. This is because HOG internally performs some computations and reduces the redundancies in the data and returns optimized feature vectors. Also more the number of lines you see in the image means it will return more features.</p><h3 name="555e" id="555e" class="graf graf--h3 graf-after--p">Generating Dataset and Data Preprocessing</h3><p name="74c4" id="74c4" class="graf graf--p graf-after--h3">Ok, cool Now we know how to extract features so we will process these steps for all images? Yes, you are right but it is not necessary to use all features from all the methods above. Let’s use only HOG for the moment and ignore color histograms and spatial binning.</p><p name="7b4e" id="7b4e" class="graf graf--p graf-after--p">Let’s decide on the HOG parameters to extract features. After a lot of hit and trials I decided to go with the following-:</p><ul class="postList"><li name="7ae0" id="7ae0" class="graf graf--li graf-after--p">Orientations- 9</li><li name="2872" id="2872" class="graf graf--li graf-after--li">Cells Per Block- 2</li><li name="b642" id="b642" class="graf graf--li graf-after--li">Pixels Per Cell- 16</li><li name="30d9" id="30d9" class="graf graf--li graf-after--li">Colorspace- YUV</li></ul><p name="bb53" id="bb53" class="graf graf--p graf-after--li">Cool, after running images through the HOG function with these parameters the final parameter size comes out to be 972 which is pretty cool!</p><p name="fcb7" id="fcb7" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Data Preprocessing<br></strong>Now our features are ready the next step is to pre-process the data. Don’t worry sklearn library is always there to help in these tasks. We can perform following preprocessing-:</p><p name="241e" id="241e" class="graf graf--p graf-after--p">i) Shuffling Data<br>ii) Splitting the Dataset into training and test set<br>iii) Normalization and Scaling of Data ( Fit and Transform of Dataset)</p><p name="ab12" id="ab12" class="graf graf--p graf-after--p">An very important point here to note is that after Step (ii) we have to fit and transform the data, but we should not fit the data in the test set because we do not want our classifier to sneak peak into our data.</p><h3 name="be83" id="be83" class="graf graf--h3 graf-after--p">Training Classifier</h3><p name="8dd7" id="8dd7" class="graf graf--p graf-after--h3">Well, features are extracted, the data is preprocessed! What next? Yup, now comes the turn of our classifier. The choice of classifier is yours but there are a plenty to chose from-:</p><ul class="postList"><li name="9c1c" id="9c1c" class="graf graf--li graf-after--p">Support Vector Machines</li><li name="26c0" id="26c0" class="graf graf--li graf-after--li">Naive Bayes</li><li name="138f" id="138f" class="graf graf--li graf-after--li">Decision Tree</li></ul><p name="5131" id="5131" class="graf graf--p graf-after--li">I decided to use Support Vector Machines because they have good compatibility with HOG. Now in SVM we have SVC(Support Vector Classifier) and here also we have a choice with various kernels and different C and gamma values.</p><p name="3998" id="3998" class="graf graf--p graf-after--p">I trained my classifier on both Linear and rbf kernel. The linear kernel took around 1.8 seconds to train with a test accuracy of 98.7% while rbf kernel took around 25 minutes to train with a test accuracy of 98.3%. I decided to use LinearSVC with default parameters solely because it was taking less time to run and it was more accurate than rbf kernel.</p><h3 name="2bc7" id="2bc7" class="graf graf--h3 graf-after--p"><strong class="markup--strong markup--h3-strong">Sliding Window</strong></h3><p name="aa25" id="aa25" class="graf graf--p graf-after--h3">Cool our classifier is now well trained and it will 99% of time will be able to predict vehicles and non vehicles correctly. So what is the next step? Well, the next step is to apply the classifier to patches of your image in order to find where exactly in the image the car is!</p><p name="3dff" id="3dff" class="graf graf--p graf-after--p">But first you need to decide on various important parameters. The first thing is from where do you start searching the car from, obviously you should not search the car in the sky, hence you can ignore the top half of the image, so basically decide a horizon under which you will search your cars. The second important thing is what will be the window size you will look for and how much two windows should overlap? Well that depends on your input image length, since here it is 64x64 so we are going to start with base window size of 64x64 only. The next important thing and very important point here to note is <strong class="markup--strong markup--p-strong">that you search for smaller cars near the horizon and as you move towards the dashboard camera you search for larger cars</strong>. This is because if the cars are near to horizon they are smaller as they are distant from your car and reverse is the case with the near cars.</p><p name="dccc" id="dccc" class="graf graf--p graf-after--p">But how much should I increase the window size and how much overlap? Well, that depends on your vision. I decided to use windows of 4 different sizes. In the below images I will try to illustrate my search area with the respective window sizes.</p><figure name="c7a7" id="c7a7" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 396px; max-height: 211px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 53.300000000000004%;"></div><img class="graf-image" data-image-id="1*4yTgxzgU2m_dprjNVlODEg.jpeg" data-width="396" data-height="211" src="https://cdn-images-1.medium.com/max/800/1*4yTgxzgU2m_dprjNVlODEg.jpeg"></div><figcaption class="imageCaption">Figure 7. My Choice of Window Sizes with Overlap and Y coordinates</figcaption></figure><figure name="d022" id="d022" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 679px; max-height: 385px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.699999999999996%;"></div><img class="graf-image" data-image-id="1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg" data-width="679" data-height="385" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ceIMDLL0Bwf5Ilyf4tAFRA.jpeg"></div><figcaption class="imageCaption">Figure 8. Window Size 64x64 Coverage</figcaption></figure><figure name="6212" id="6212" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 680px; max-height: 381px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.00000000000001%;"></div><img class="graf-image" data-image-id="1*dVObtUCDcciK2mT9CKmdHA.jpeg" data-width="680" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*dVObtUCDcciK2mT9CKmdHA.jpeg"></div><figcaption class="imageCaption">Figure 9. Window Size 80x80 Coverage</figcaption></figure><figure name="6ee9" id="6ee9" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div><img class="graf-image" data-image-id="1*YaK_vrgaR6G49xTb_1rc7g.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YaK_vrgaR6G49xTb_1rc7g.jpeg"></div><figcaption class="imageCaption">Figure 10. Window Size 96x96 Coverage</figcaption></figure><figure name="fb03" id="fb03" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 667px; max-height: 379px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.8%;"></div><img class="graf-image" data-image-id="1*YM4xsH56WUD6064TLoIVbA.jpeg" data-width="667" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*YM4xsH56WUD6064TLoIVbA.jpeg"></div><figcaption class="imageCaption">Figure 11. Window Size 128x128 coverage</figcaption></figure><p name="231b" id="231b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">I had total window size of 470!</strong> So once we have defined all the sliding windows we will be searching for, the next step is to extract features of all the patches window by window and run our classifier to predict if the found window is car or not. Remember we trained our model on feature extracted from 64x64 image so for windows that are not of the same size we need to resize first them to 64x64 in order to keep the features same. Well lets see how our classifier worked.</p><figure name="80fc" id="80fc" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 670px; max-height: 379px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.599999999999994%;"></div><img class="graf-image" data-image-id="1*iqut53Zj7OzK4TeKnigFpQ.jpeg" data-width="670" data-height="379" src="https://cdn-images-1.medium.com/max/800/1*iqut53Zj7OzK4TeKnigFpQ.jpeg"></div><figcaption class="imageCaption">Figure 12. Refined Windows after running the classifier.</figcaption></figure><h3 name="3c38" id="3c38" class="graf graf--h3 graf-after--figure">Heatmaps</h3><p name="1262" id="1262" class="graf graf--p graf-after--h3">So we are able to detect the sliding windows, but there is a problem. So many windows are overlapping with each other, how to draw the final bounding box? Answer is Heatmap. We will create a blank black image of the same size as that of original image and for all refined windows that were identified we will add the pixels values by one for the whole region of the refined window. In this way we will have regions with different intensity with the common region being the most intense. We can then apply a threshold to clip the final image and get the coordinates of the final box.</p><figure name="3cca" id="3cca" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 681px; max-height: 400px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 58.699999999999996%;"></div><img class="graf-image" data-image-id="1*_LHNVY22lvpnqBYcjoqk9w.jpeg" data-width="681" data-height="400" src="https://cdn-images-1.medium.com/max/800/1*_LHNVY22lvpnqBYcjoqk9w.jpeg"></div><figcaption class="imageCaption">Figure 13. Heatmap drawn after increasing the pixel intensities of refined windows</figcaption></figure><figure name="3b0c" id="3b0c" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 403px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 57.49999999999999%;"></div><img class="graf-image" data-image-id="1*5NVPIjwExeFL33FndZN6ag.jpeg" data-width="713" data-height="410" src="https://cdn-images-1.medium.com/max/800/1*5NVPIjwExeFL33FndZN6ag.jpeg"></div><figcaption class="imageCaption">Figure 14. Final Image After applying the threshold</figcaption></figure><figure name="efe2" id="efe2" class="graf graf--figure graf-after--figure"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 394px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 56.3%;"></div><img class="graf-image" data-image-id="1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg" data-width="1280" data-height="720" src="https://cdn-images-1.medium.com/max/800/1*vPiJXEnhQe1RCJd8Lbh_Sg.jpeg"></div><figcaption class="imageCaption">Figure 15. Testing Pipeline On a New Image</figcaption></figure><p name="fe95" id="fe95" class="graf graf--p graf-after--figure">Ok, that was cool, is that all? Well, yes and no! There is one more problem when you run the code on a number of more test images.</p><figure name="1bab" id="1bab" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 1153px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 164.7%;"></div><img class="graf-image" data-image-id="1*ri3XRzhNoYR0-qxDaOR7Og.png" data-width="1159" data-height="1909" src="https://cdn-images-1.medium.com/max/800/1*ri3XRzhNoYR0-qxDaOR7Og.png"></div><figcaption class="imageCaption">Figure 16. Applying Heatmap on some more Images</figcaption></figure><p name="3337" id="3337" class="graf graf--p graf-after--figure">Well as you an observe there are some false positives detected in our image, cars coming from left lane are also detected, so how do we solve this? First of all we need to observe how this problem came up in the first place? Well our classifier had 98.7% accuracy. We had total number of windows to be 470. So in the resulting windows we will have around 6 windows that will be false positives. These windows can appear anywhere if you have a lower threshold in the final heatmap image. So to solve the problem of car coming in the other lane and some false positives can be solved by just increasing the threshold. In my case I set the threshold to value 4 but again thresholding depends on a number of factors, the colorspace used, the SVM accuracy and so on.</p><h3 name="3698" id="3698" class="graf graf--h3 graf-after--p">Averaging Out</h3><p name="ff1c" id="ff1c" class="graf graf--p graf-after--h3">Well we are almost done at this moment! The pipeline works fantastic with the images but still there is one problem if you will run the pipeline on the images coming from a video stream. The final detected boxes will become very shaky and will not deliver a smooth experience, it may be possible that the box goes away in some frames. So what’s the solution? The solution is pretty intuitive, store all the refined windows detected from the previous 15 frames and average out the rectangles in the current frame. Also you need to adjust threshold to a higher level now. Just by doing so the final bounding boxes appear less shaky and delivers a smooth flow. I tried my pipeline on the project video and results are somewhat like <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">this</a>.</p><h3 name="2fa7" id="2fa7" class="graf graf--h3 graf-after--p">Some Tips and Tricks</h3><ol class="postList"><li name="2225" id="2225" class="graf graf--li graf-after--h3">If you are stuck with long processing time while running pipeline on video, please try reducing windows first.</li><li name="68af" id="68af" class="graf graf--li graf-after--li">If you are still stuck with long processing time try reducing the number of features extracted.</li><li name="fa1a" id="fa1a" class="graf graf--li graf-after--li">If you have a test set of say 10,000 images and your feature size is 8000, SVM will not perform upto the mark even if the accuracy on the test set is above 95%. Use SVM with ‘rbf’ kernel or reduce features.</li><li name="18e7" id="18e7" class="graf graf--li graf-after--li">If it still takes long time for the pipeline to run, try skipping one half or two thirds of the frames. It will speed up. Remember by skipping frames I mean skipping the processing of frames and setting the refined windows of that frame to rectangles gathered from previous 15 frames stored in some data structure.</li></ol><blockquote name="223a" id="223a" class="graf graf--pullquote graf-after--li">You can observe the final video output <a href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" data-href="https://github.com/harveenchadha/Udacity-CarND-Vehicle-Detection-and-Tracking/blob/master/project_video_output.mp4" class="markup--anchor markup--pullquote-anchor" rel="noopener" target="_blank">here</a>.</blockquote><p name="ccb4" id="ccb4" class="graf graf--p graf-after--pullquote graf--trailing">Of course the video is not perfect but I am happy with the final output. There were less lags, also cars coming from other direction were not detected. Also. I am working on YOLO and SSD approach and will write soon about the learnings from them too. HURRAY!! Term 1 is over, time for some self-retrospection and very excited for term 2.</p></div></div></section>
-                </section>
-                <footer><p>By <a href="https://medium.com/@harveenchadha" class="p-author h-card">Harveen Singh Chadha</a> on <a href="https://medium.com/p/f4a8995fc30a"><time class="dt-published" datetime="2018-03-17T18:36:10.358Z">March 17, 2018</time></a>.</p><p><a href="https://medium.com/@harveenchadha/vehicle-detection-and-tracking-using-machine-learning-and-hog-f4a8995fc30a" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2020.</p></footer></article>
+            </div>
+         </div>
+      </section>
+   </section>
+   <footer>
+      <p>By <a href="https://medium.com/@harveenchadha" class="p-author h-card">Harveen Singh Chadha</a> on <a href="https://medium.com/p/f4a8995fc30a"><time class="dt-published" datetime="2018-03-17T18:36:10.358Z">March 17, 2018</time></a>.</p>
+      <p><a href="https://medium.com/@harveenchadha/vehicle-detection-and-tracking-using-machine-learning-and-hog-f4a8995fc30a" class="p-canonical">Canonical link</a></p>
+      <p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2020.</p>
+   </footer>
+</article>
