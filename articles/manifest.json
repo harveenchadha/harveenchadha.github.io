@@ -1,0 +1,10 @@
+{
+  "articles": [
+    {
+      "title": "Sample Article Title",
+      "date": "2026-02-02",
+      "venue": "Working Notes",
+      "file": "sample-article.md"
+    }
+  ]
+}

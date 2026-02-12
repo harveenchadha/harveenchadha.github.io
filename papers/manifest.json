@@ -1,0 +1,14 @@
+{
+  "papers": [
+    {
+      "title": "Sample Paper Title",
+      "authors": "Harveen Chadha, Coauthor A, Coauthor B",
+      "venue": "Conference or Journal",
+      "year": "2025",
+      "abstract": "This is a placeholder abstract. Replace this text with your paper abstract.",
+      "pdf": "",
+      "code": "",
+      "slides": ""
+    }
+  ]
+}
