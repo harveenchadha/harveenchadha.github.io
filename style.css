@@ -994,17 +994,6 @@ img {
 }
 
 /* ========================
-   X / Twitter Feed
-   ======================== */
-
-.feed-embed {
-  max-width: 600px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-/* ========================
    Footer
    ======================== */
 
@@ -1120,11 +1109,40 @@ img {
   }
 
   .resp-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .highlight-banner {
     padding: 48px var(--space);
+  }
+
+  .highlight-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .books-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .patent-card {
+    padding: 20px;
+  }
+
+  .footer-links {
+    gap: 16px;
   }
 }
 
@@ -1151,6 +1169,31 @@ img {
 
   .section {
     padding: 48px var(--space);
+  }
+
+  .resp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    text-align: center;
+  }
+
+  .oss-card {
+    padding: 20px;
+  }
+
+  .model-card {
+    padding: 16px;
+  }
+
+  .timeline {
+    padding-left: 24px;
   }
 }
 
