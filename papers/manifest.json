@@ -1,11 +1,81 @@
 {
   "papers": [
     {
-      "title": "Sample Paper Title",
-      "authors": "Harveen Chadha, Coauthor A, Coauthor B",
-      "venue": "Conference or Journal",
-      "year": "2025",
-      "abstract": "This is a placeholder abstract. Replace this text with your paper abstract.",
+      "title": "CLSRIL-23: Cross Lingual Speech Representations for Indic Languages",
+      "authors": "Anirudh Gupta, Harveen Singh Chadha, Priyanshi Shah, Neeraj Chhimwal, Ankur Dhuriya, Rishabh Gaur",
+      "venue": "arXiv",
+      "year": "2021",
+      "abstract": "We present CLSRIL-23, a self-supervised pretrained speech model on 10,000 hours of raw speech data across 23 Indic languages. The model learns cross-lingual speech representations that can be fine-tuned for downstream ASR tasks.",
+      "pdf": "https://arxiv.org/abs/2107.07402",
+      "code": "https://github.com/Open-Speech-EkStep",
+      "slides": ""
+    },
+    {
+      "title": "Vakyansh: ASR Toolkit for Low Resource Indic Languages",
+      "authors": "Harveen Singh Chadha, Anirudh Gupta, Priyanshi Shah, Neeraj Chhimwal, Ankur Dhuriya, Rishabh Gaur, Vivek Raghavan",
+      "venue": "arXiv",
+      "year": "2022",
+      "abstract": "We present Vakyansh, an end-to-end toolkit for Speech Recognition in Indic languages. It includes automatic data pipelines for data creation, model training, evaluation, and deployment. ASR models for 18 Indic languages are released along with 14,000 hours of unlabelled and 10,000 hours of labelled data.",
+      "pdf": "https://arxiv.org/abs/2203.16512",
+      "code": "https://github.com/Open-Speech-EkStep",
+      "slides": ""
+    },
+    {
+      "title": "Code Switched and Code Mixed Speech Recognition for Indic Languages",
+      "authors": "Harveen Singh Chadha, Priyanshi Shah, Ankur Dhuriya, Neeraj Chhimwal, Anirudh Gupta, Vivek Raghavan",
+      "venue": "",
+      "year": "2022",
+      "abstract": "Research on building speech recognition systems that can handle code-switching and code-mixing patterns common in Indian multilingual conversations.",
+      "pdf": "",
+      "code": "",
+      "slides": ""
+    },
+    {
+      "title": "Toxicity Detection for Indic Multilingual Social Media Content",
+      "authors": "M. Jhaveri, D. Ramaiya, Harveen Singh Chadha",
+      "venue": "",
+      "year": "2023",
+      "abstract": "A system for detecting toxic content across multiple Indic languages in social media, addressing the challenge of multilingual content moderation.",
+      "pdf": "",
+      "code": "",
+      "slides": ""
+    },
+    {
+      "title": "indic-punct: Automatic Punctuation Restoration and Inverse Text Normalization for Indic Languages",
+      "authors": "Harveen Singh Chadha et al.",
+      "venue": "",
+      "year": "2022",
+      "abstract": "A framework for automatic punctuation restoration and inverse text normalization specifically designed for Indic languages, improving ASR output readability.",
+      "pdf": "",
+      "code": "https://github.com/Open-Speech-EkStep/indic-punct",
+      "slides": ""
+    },
+    {
+      "title": "Length Aware Speech Translation for Video Dubbing",
+      "authors": "Harveen Singh Chadha",
+      "venue": "Microsoft",
+      "year": "2024",
+      "abstract": "Research on speech translation systems that are aware of target length constraints, enabling better synchronization for video dubbing applications.",
+      "pdf": "",
+      "code": "",
+      "slides": ""
+    },
+    {
+      "title": "Addressing Speaker Gender Bias in Large Scale Speech Translation Systems",
+      "authors": "Harveen Singh Chadha",
+      "venue": "Microsoft",
+      "year": "2024",
+      "abstract": "Investigation and mitigation of gender bias in large-scale speech translation systems, ensuring more equitable translations across speakers.",
+      "pdf": "",
+      "code": "",
+      "slides": ""
+    },
+    {
+      "title": "Is Word Error Rate a Good Evaluation Metric for Speech Recognition in Indic Languages?",
+      "authors": "Harveen Singh Chadha",
+      "venue": "",
+      "year": "2022",
+      "abstract": "A critical examination of Word Error Rate as an evaluation metric for ASR systems in Indic languages, exploring its limitations and proposing alternatives.",
       "pdf": "",
       "code": "",
       "slides": ""

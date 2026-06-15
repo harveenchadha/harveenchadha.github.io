@@ -3,66 +3,48 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Papers | Harveen Chadha</title>
-    <meta name="description" content="Research papers and abstracts by Harveen Chadha." />
-    <link rel="canonical" href="https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO/papers/" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Papers | Harveen Chadha" />
-    <meta property="og:description" content="Research papers and abstracts by Harveen Chadha." />
-    <meta property="og:url" content="https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO/papers/" />
-
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Papers | Harveen Chadha" />
-    <meta name="twitter:description" content="Research papers and abstracts by Harveen Chadha." />
-
+    <title>Publications — Harveen Singh Chadha</title>
+    <meta name="description" content="Research publications by Harveen Singh Chadha." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>"
+    />
   </head>
   <body>
-    <div class="bg-orb orb-a"></div>
-    <div class="bg-orb orb-b"></div>
-    <div class="bg-orb orb-c"></div>
-
     <header class="site-header">
       <nav class="nav">
-        <a class="logo" href="../index.html">HC</a>
+        <a class="logo" href="../">Harveen</a>
         <div class="nav-links">
-          <a href="../index.html#experience">Experience</a>
-          <a href="./">Papers</a>
-          <a href="../index.html#open-source">Open Source</a>
-          <a href="../index.html#teaching">Teaching</a>
-          <a href="../index.html#contact">Contact</a>
-          <a href="../articles/index.html">Articles</a>
-        </div>
-        <div class="nav-actions">
-          <a class="pill" href="https://x.com/HarveenChadha" target="_blank" rel="noreferrer">X</a>
-          <a class="pill" href="https://www.linkedin.com/in/harveenchadha/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="../#about">About</a>
+          <a href="../#experience">Experience</a>
+          <a href="../#research">Research</a>
+          <a href="../#open-source">Open Source</a>
         </div>
       </nav>
     </header>
-
-    <main class="section" id="top">
-      <div class="section-heading">
-        <h2>Papers</h2>
-        <p>
-          Paper titles with abstracts. Add new entries by updating
-          <code>papers/manifest.json</code>.
+    <main>
+      <section class="section" style="padding-top: 48px">
+        <div class="section-label">Research</div>
+        <h2 class="section-title">All Publications</h2>
+        <p class="section-desc">
+          Full list of research publications. Also available on
+          <a href="https://scholar.google.com/citations?user=fEY-SOsAAAAJ" target="_blank" rel="noreferrer">Google Scholar</a>.
         </p>
-      </div>
-
-      <div id="papers" class="list"></div>
+        <div id="papers-container" class="papers-list"></div>
+      </section>
     </main>
-
     <footer class="site-footer">
-      <p>© 2026 Harveen Chadha. Built for GitHub Pages.</p>
+      <div class="footer-inner">
+        <p>&copy; 2026 Harveen Singh Chadha</p>
+      </div>
     </footer>
-
-    <script src="./papers.js" defer></script>
+    <script src="papers.js"></script>
   </body>
 </html>
