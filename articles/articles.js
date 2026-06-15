@@ -1,70 +1,27 @@
-const list = document.getElementById("articles");
+fetch("./manifest.json")
+  .then((r) => r.json())
+  .then(({ articles }) => {
+    const container = document.getElementById("articles-container");
+    if (!articles.length) return;
 
-const renderEmpty = () => {
-  list.innerHTML = `
-    <article class="panel">
-      <h3>No articles yet</h3>
-      <p>Add your first markdown file and update the manifest to publish it.</p>
-    </article>
-  `;
-};
-
-const renderArticle = (article, html) => {
-  const wrapper = document.createElement("article");
-  wrapper.className = "list-item";
-
-  const left = document.createElement("div");
-  const title = document.createElement("h3");
-  title.textContent = article.title;
-
-  const meta = document.createElement("p");
-  meta.textContent = `${article.date}${article.venue ? " · " + article.venue : ""}`;
-
-  left.appendChild(title);
-  left.appendChild(meta);
-
-  const preview = document.createElement("div");
-  preview.className = "article-preview";
-  preview.innerHTML = html;
-
-  wrapper.appendChild(left);
-  wrapper.appendChild(preview);
-
-  list.appendChild(wrapper);
-};
-
-const fetchMarkdown = async (path) => {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Failed to load ${path}`);
-  }
-  return response.text();
-};
-
-const loadArticles = async () => {
-  try {
-    const response = await fetch("./manifest.json");
-    if (!response.ok) {
-      renderEmpty();
-      return;
-    }
-
-    const data = await response.json();
-    if (!Array.isArray(data.articles) || data.articles.length === 0) {
-      renderEmpty();
-      return;
-    }
-
-    list.innerHTML = "";
-
-    for (const article of data.articles) {
-      const markdown = await fetchMarkdown(`./${article.file}`);
-      const html = marked.parse(markdown);
-      renderArticle(article, html);
-    }
-  } catch (error) {
-    renderEmpty();
-  }
-};
-
-loadArticles();
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+    script.onload = () => {
+      articles.forEach((article) => {
+        fetch(article.file)
+          .then((r) => r.text())
+          .then((md) => {
+            const el = document.createElement("article");
+            el.className = "paper";
+            el.innerHTML = `
+              <div class="paper-info">
+                <h3>${article.title}</h3>
+                <p class="paper-venue">${article.date} · ${article.venue}</p>
+                <div style="color:var(--muted);margin-top:12px;line-height:1.7">${marked.parse(md)}</div>
+              </div>`;
+            container.appendChild(el);
+          });
+      });
+    };
+    document.head.appendChild(script);
+  });

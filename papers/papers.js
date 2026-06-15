@@ -1,88 +1,36 @@
-const list = document.getElementById("papers");
-
-const renderEmpty = () => {
-  list.innerHTML = `
-    <article class="panel">
-      <h3>No papers yet</h3>
-      <p>Add your first entry in papers/manifest.json to publish it.</p>
-    </article>
-  `;
-};
-
-const renderPaper = (paper) => {
-  const wrapper = document.createElement("article");
-  wrapper.className = "list-item";
-
-  const left = document.createElement("div");
-  const title = document.createElement("h3");
-  title.textContent = paper.title;
-
-  const meta = document.createElement("p");
-  meta.textContent = `${paper.authors} · ${paper.venue} · ${paper.year}`;
-
-  left.appendChild(title);
-  left.appendChild(meta);
-
-  const abstract = document.createElement("p");
-  abstract.className = "paper-abstract";
-  abstract.textContent = paper.abstract;
-
-  const actions = document.createElement("div");
-  actions.className = "list-actions";
-
-  if (paper.pdf) {
-    const pdf = document.createElement("a");
-    pdf.href = paper.pdf;
-    pdf.target = "_blank";
-    pdf.rel = "noreferrer";
-    pdf.textContent = "PDF";
-    actions.appendChild(pdf);
-  }
-
-  if (paper.code) {
-    const code = document.createElement("a");
-    code.href = paper.code;
-    code.target = "_blank";
-    code.rel = "noreferrer";
-    code.textContent = "Code";
-    actions.appendChild(code);
-  }
-
-  if (paper.slides) {
-    const slides = document.createElement("a");
-    slides.href = paper.slides;
-    slides.target = "_blank";
-    slides.rel = "noreferrer";
-    slides.textContent = "Slides";
-    actions.appendChild(slides);
-  }
-
-  wrapper.appendChild(left);
-  wrapper.appendChild(abstract);
-  wrapper.appendChild(actions);
-
-  list.appendChild(wrapper);
-};
-
-const loadPapers = async () => {
-  try {
-    const response = await fetch("./manifest.json");
-    if (!response.ok) {
-      renderEmpty();
+fetch("./manifest.json")
+  .then((r) => r.json())
+  .then(({ papers }) => {
+    const container = document.getElementById("papers-container");
+    if (!papers.length) {
+      container.innerHTML = "<p>No publications yet.</p>";
       return;
     }
 
-    const data = await response.json();
-    if (!Array.isArray(data.papers) || data.papers.length === 0) {
-      renderEmpty();
-      return;
-    }
+    container.innerHTML = papers
+      .map((p) => {
+        const links = [
+          p.pdf ? `<a href="${p.pdf}" target="_blank" rel="noreferrer">PDF</a>` : "",
+          p.code ? `<a href="${p.code}" target="_blank" rel="noreferrer">Code</a>` : "",
+          p.slides ? `<a href="${p.slides}" target="_blank" rel="noreferrer">Slides</a>` : "",
+        ]
+          .filter(Boolean)
+          .join("");
 
-    list.innerHTML = "";
-    data.papers.forEach(renderPaper);
-  } catch (error) {
-    renderEmpty();
-  }
-};
-
-loadPapers();
+        return `
+          <article class="paper">
+            <div class="paper-info">
+              <h3>${p.title}</h3>
+              <p class="paper-authors">${p.authors}</p>
+              ${p.venue || p.year ? `<p class="paper-venue">${[p.venue, p.year].filter(Boolean).join(", ")}</p>` : ""}
+              ${p.abstract ? `<p style="color:var(--muted);font-size:0.9rem;margin-top:8px;line-height:1.6">${p.abstract}</p>` : ""}
+            </div>
+            ${links ? `<div class="paper-links">${links}</div>` : ""}
+          </article>`;
+      })
+      .join("");
+  })
+  .catch(() => {
+    document.getElementById("papers-container").innerHTML =
+      "<p>Could not load publications.</p>";
+  });
