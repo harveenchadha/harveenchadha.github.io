@@ -54,19 +54,4 @@
     });
   });
 
-  const feed = document.getElementById("twitter-feed");
-  if (feed) {
-    setTimeout(() => {
-      if (!feed.querySelector("iframe")) {
-        feed.innerHTML = `
-          <div style="padding:32px;text-align:center;color:var(--muted)">
-            <p style="margin-bottom:12px">X feed could not be loaded.</p>
-            <a href="https://x.com/HarveenChadha" target="_blank" rel="noreferrer"
-               style="color:var(--accent);font-weight:600;text-decoration:none">
-              Follow @HarveenChadha on X &rarr;
-            </a>
-          </div>`;
-      }
-    }, 8000);
-  }
 })();
