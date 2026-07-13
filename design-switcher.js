@@ -2,6 +2,7 @@
   var designs = [
     { id: "claude", label: "Claude Opus 4", path: "/" },
     { id: "glm-5.2", label: "GLM 5.2", path: "/llm_design/glm-5.2/" },
+    { id: "grok-4.5-high", label: "Grok 4.5 High", path: "/llm_design/grok-4.5-high/" },
   ];
 
   var currentPath = window.location.pathname;
